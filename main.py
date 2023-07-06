@@ -43,6 +43,16 @@ def update_animal(animal_id):
         return jsonify(animal)
     return jsonify({"message":"Animal not found"}), 404
 
+#Delete animals
+@app.route('/animals/<int:animal_id>', methods=['DELETE'])
+def delete_animals(animal_id):
+    animal = next((animal for animal in animals if animal['id'] == animal_id), None)
+    if animal:
+        animals.remove(animal)
+        return jsonify({"message":"Animal deleted successfully"})
+    return jsonify({"message":"Animal not found"}), 404
+    
+    
 
 #server execution
 if __name__ == '__main__':
