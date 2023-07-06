@@ -13,15 +13,15 @@ animals = [
 def all_animals():
     return jsonify(animals)
 
-
+#Get animal by id
 @app.route('/animals/<int:animal_id>', methods=["GET"])
 def get_animal_by_id(animal_id):
     animal = next((animal for animal in animals if animal['id'] == animal_id), None)
     if animal:
         return jsonify(animal)
-    return jsonify({"messagem":"Animal não encontrado"}), 404
+    return jsonify({"message":"Animal not found"}), 404
 
-
+#Post animal
 @app.route('/animals', methods=['POST'])
 def save_animal():
     new_animal = {
@@ -32,6 +32,17 @@ def save_animal():
     
     animals.append(new_animal)
     return jsonify(new_animal), 201
+
+#Update animal
+@app.route('/animals/<int:animal_id>', methods=['PUT'])
+def update_animal(animal_id):
+    animal = next((animal for animal in animals if animal['id'] == animal_id), None)
+    if animal:
+        animal['name'] = request.json['name']
+        animal['type'] = request.json['type']
+        return jsonify(animal)
+    return jsonify({"message":"Animal not found"}), 404
+
 
 #server execution
 if __name__ == '__main__':
