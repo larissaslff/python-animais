@@ -3,12 +3,7 @@ import mysql.connector
 
 app = Flask(__name__)
 
-""" animals = [
-    {"id": 1, "name": "Nina", "type": "cachorro"},
-    {"id": 2, "name": "Preta", "type": "cachorro"},
-    {"id": 3, "name": "Pity", "type": "cachorro"}
-]
- """
+
 db = mysql.connector.connect(
     host='localhost',
     user='root',
@@ -37,7 +32,7 @@ def get_animal_by_id(animal_id):
     sql = 'SELECT * FROM pets WHERE id = %s'
     mycursor.execute(sql, (animal_id,))
     result = mycursor.fetchone() 
-    #animal = next((animal for animal in animals if animal['id'] == animal_id), None)
+
     if result:
         animal = {
             "id": result[0],
