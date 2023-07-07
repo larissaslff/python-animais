@@ -62,10 +62,21 @@ def save_animal():
 #Update animal
 @app.route('/animals/<int:animal_id>', methods=['PUT'])
 def update_animal(animal_id):
-    animal = next((animal for animal in animals if animal['id'] == animal_id), None)
-    if animal:
-        animal['name'] = request.json['name']
-        animal['type'] = request.json['type']
+    name = request.json['name']
+    type = request.json['type']
+    
+    mycursor = db.cursor()
+    sql = 'UPDATE pets SET name = %s, type = %s WHERE id = %s'
+    val = (name, type, animal_id)
+    mycursor.execute(sql, val)
+    db.commit()
+    
+    if mycursor.rowcount > 0:
+        animal = {
+            'id': animal_id,
+            'name': name,
+            'type': type 
+        }
         return jsonify(animal)
     return jsonify({"message":"Animal not found"}), 404
 
