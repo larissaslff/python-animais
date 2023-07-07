@@ -33,10 +33,20 @@ def all_animals():
 #Get animal by id
 @app.route('/animals/<int:animal_id>', methods=["GET"])
 def get_animal_by_id(animal_id):
-    animal = next((animal for animal in animals if animal['id'] == animal_id), None)
-    if animal:
+    mycursor = db.cursor()
+    sql = 'SELECT * FROM pets WHERE id = %s'
+    mycursor.execute(sql, (animal_id,))
+    result = mycursor.fetchone() 
+    #animal = next((animal for animal in animals if animal['id'] == animal_id), None)
+    if result:
+        animal = {
+            "id": result[0],
+            "name": result[1],
+            "type": result[2]
+        }
         return jsonify(animal)
-    return jsonify({"message":"Animal not found"}), 404
+    else:
+        return jsonify({"message":"Animal not found"}), 404
 
 #Post animal
 @app.route('/animals', methods=['POST'])
