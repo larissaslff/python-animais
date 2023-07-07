@@ -83,9 +83,14 @@ def update_animal(animal_id):
 #Delete animals
 @app.route('/animals/<int:animal_id>', methods=['DELETE'])
 def delete_animals(animal_id):
-    animal = next((animal for animal in animals if animal['id'] == animal_id), None)
-    if animal:
-        animals.remove(animal)
+    mycursor = db.cursor()
+    sql = 'DELETE FROM pets WHERE id = %s'
+    val = (animal_id)
+    mycursor.execute(sql, (val,))
+    db.commit()
+    
+    
+    if mycursor.rowcount > 0:
         return jsonify({"message":"Animal deleted successfully"})
     return jsonify({"message":"Animal not found"}), 404
     
