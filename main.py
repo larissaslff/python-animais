@@ -99,7 +99,7 @@ def delete_animals(animal_id):
         return jsonify({"message":"Animal deleted successfully"})
     return jsonify({"message":"Animal not found"}), 404
     
-    
+  
 
 #server execution
 if __name__ == '__main__':
